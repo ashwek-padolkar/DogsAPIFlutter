@@ -247,14 +247,12 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
             topRight: Radius.circular(10),
           ),
           child: CachedNetworkImage(
-            imageUrl: imageUrl,
-            width: double.infinity, // Make image width fit the card width
+            imageUrl: 'https://cors-anywhere.herokuapp.com/' + imageUrl,
+            width: double.infinity,
             height: 250,
-            fit: BoxFit.fill, // Ensure the image covers the area without distortion
-            placeholder: (context, url) =>
-                const CircularProgressIndicator(),
-            errorWidget: (context, url, error) =>
-                const Placeholder(fallbackHeight: 250),
+            fit: BoxFit.fill,
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Placeholder(fallbackHeight: 250),
           ),
         ),
         const SizedBox(height: 10),
