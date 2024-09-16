@@ -251,7 +251,11 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
             width: double.infinity,
             height: 250,
             fit: BoxFit.fill,
-            placeholder: (context, url) => const CircularProgressIndicator(),
+            placeholder: (context, url) => const SizedBox(
+              width: 10, // Adjust width as needed
+              height: 10, // Adjust height as needed
+              child: CircularProgressIndicator(strokeWidth: 2), // strokeWidth controls the thickness
+            ),
             errorWidget: (context, url, error) => const Placeholder(fallbackHeight: 250),
           ),
         ),
