@@ -39,57 +39,60 @@ class _DogBreedsScreenState extends State<DogBreedsScreen>
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: PreferredSize(
-      preferredSize: const Size.fromHeight(kToolbarHeight + 20), // Height of AppBar + top margin
-      child: Container(
-        margin: const EdgeInsets.only(top: 40.0, left: 146.0), // Add top margin of 20px
-        child: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Text(
-                'Dog Breeds',
-                style: TextStyle(
-                  fontSize: 25, // Adjust font size for the title
-                  color: Color(0xFF464B64), // Title color
-                  fontWeight: FontWeight.bold,
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(
+            kToolbarHeight + 20), // Height of AppBar + top margin
+        child: Container(
+          margin: const EdgeInsets.only(
+              top: 40.0, left: 146.0), // Add top margin of 20px
+          child: AppBar(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text(
+                  'Dog Breeds',
+                  style: TextStyle(
+                    fontSize: 25, // Adjust font size for the title
+                    color: Color(0xFF464B64), // Title color
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0), // Add left margin to the Table button
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Change tab to Table
-                        _tabController.index = 0;
-                      },
-                      child: const Text('Table'),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0), // Add left margin to the Table button
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Change tab to Table
+                          _tabController.index = 0;
+                        },
+                        child: const Text('Table'),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8), // Space between buttons
-                  ElevatedButton(
-                    onPressed: () {
-                      // Change tab to Carousel
-                      _tabController.index = 1;
-                    },
-                    child: const Text('Carousel'),
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(width: 8), // Space between buttons
+                    ElevatedButton(
+                      onPressed: () {
+                        // Change tab to Carousel
+                        _tabController.index = 1;
+                      },
+                      child: const Text('Carousel'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-    body: TabBarView(
-      controller: _tabController,
-      children: const [
-        DogBreedsTable(),
-        DogBreedsCarousel(),
-      ],
-    ),
-  );
-}
+      body: TabBarView(
+        controller: _tabController,
+        children: const [
+          DogBreedsTable(),
+          DogBreedsCarousel(),
+        ],
+      ),
+    );
+  }
 }

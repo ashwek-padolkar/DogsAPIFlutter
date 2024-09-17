@@ -79,8 +79,9 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
   }
 
   void _nextPage() {
-    if (_currentPage < _dogBreeds.length - 1) { // Ensure there are pages left
-      _currentPage +=1;
+    if (_currentPage < _dogBreeds.length - 1) {
+      // Ensure there are pages left
+      _currentPage += 1;
       _pageController.animateToPage(
         _currentPage,
         duration: const Duration(milliseconds: 300),
@@ -90,8 +91,9 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
   }
 
   void _previousPage() {
-    if (_currentPage > 1) { // Ensure not on the first page
-      _currentPage -=1;
+    if (_currentPage > 1) {
+      // Ensure not on the first page
+      _currentPage -= 1;
       _pageController.animateToPage(
         _currentPage,
         duration: const Duration(milliseconds: 300),
@@ -119,7 +121,8 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
           const SizedBox(height: 20),
           // Container to center the row and set its width
           Container(
-            width: MediaQuery.of(context).size.width * 0.789, // 78.9% width of the screen
+            width: MediaQuery.of(context).size.width *
+                0.789, // 78.9% width of the screen
             alignment: Alignment.center, // Align it at the center
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,7 +169,9 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
                       ),
                       child: IconButton(
                         icon: const Icon(Icons.arrow_forward_ios),
-                        onPressed: _currentPage < _dogBreeds.length - 1 ? _nextPage : null,
+                        onPressed: _currentPage < _dogBreeds.length - 1
+                            ? _nextPage
+                            : null,
                         iconSize: 24, // Adjust icon size if needed
                         padding: EdgeInsets.zero, // Remove default padding
                         color: Colors.grey[600], // Icon color
@@ -174,36 +179,38 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
                     ),
                   ],
                 )
-
               ],
             ),
           ),
           const SizedBox(height: 10),
-            SizedBox(
-              height: 470, // Height of the carousel
-              child: ClipRect( // Ensure that overflow is clipped
-                child: Align(
-                  alignment: Alignment.centerLeft, // Align the carousel to the left within the 88% width
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 150), // Left margin of 10px
-                    width: MediaQuery.of(context).size.width * 0.78, // 88% width of the screen
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: _dogBreeds.length,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _currentPage = index;
-                        });
-                      },
-                      itemBuilder: (context, index) {
-                        return _buildCard(_dogBreeds[index]);
-                      },
-                    ),
+          SizedBox(
+            height: 470, // Height of the carousel
+            child: ClipRect(
+              // Ensure that overflow is clipped
+              child: Align(
+                alignment: Alignment
+                    .centerLeft, // Align the carousel to the left within the 88% width
+                child: Container(
+                  margin:
+                      const EdgeInsets.only(left: 150), // Left margin of 10px
+                  width: MediaQuery.of(context).size.width *
+                      0.78, // 88% width of the screen
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _dogBreeds.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      return _buildCard(_dogBreeds[index]);
+                    },
                   ),
                 ),
               ),
             ),
-
+          ),
 
           const SizedBox(height: 20),
           // Load More button
@@ -228,94 +235,91 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
   }
 
   Widget _buildCard(Map<String, String?> breed) {
-  final imageUrl = breed['image'] ?? '';
+    final imageUrl = breed['image'] ?? '';
 
-  return SizedBox(
-  child: Card(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
-    ),
-    elevation: 10,
-    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        // Image with rounded corners at the top
-        ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-          ),
-          child: CachedNetworkImage(
-            imageUrl: 'https://cors-anywhere.herokuapp.com/' + imageUrl,
-            width: double.infinity,
-            height: 250,
-            fit: BoxFit.fill,
-            placeholder: (context, url) => const SizedBox(
-              width: 10, // Adjust width as needed
-              height: 10, // Adjust height as needed
-              child: CircularProgressIndicator(strokeWidth: 2), // strokeWidth controls the thickness
+    return SizedBox(
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 10,
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Image with rounded corners at the top
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+              child: CachedNetworkImage(
+                imageUrl: 'https://api.allorigins.win/raw?url=' + imageUrl,
+                width: double.infinity,
+                height: 250,
+                fit: BoxFit.fill,
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) =>
+                    const Placeholder(fallbackHeight: 250),
+              ),
             ),
-            errorWidget: (context, url, error) => const Placeholder(fallbackHeight: 250),
-          ),
+            const SizedBox(height: 10),
+            // Content section
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    breed['name'] ?? '-',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    breed['origin'] ?? '-',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight:
+                          FontWeight.bold, // Set fontWeight to bold for origin
+                      color: Color.fromARGB(255, 122, 122, 122),
+                    ),
+                  ),
+                  const SizedBox(
+                      height: 5), // Margin of 10px above lifeSpan text
+                  Text(
+                    breed['lifeSpan'] ?? '-',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 122, 122, 122),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    breed['temperament'] ?? '-',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 122, 122, 122),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    breed['bredFor'] ?? '-',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 122, 122, 122),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
         ),
-        const SizedBox(height: 10),
-        // Content section
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                breed['name'] ?? '-',
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                breed['origin'] ?? '-',
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,  // Set fontWeight to bold for origin
-                  color: Color.fromARGB(255, 122, 122, 122),
-                ),
-              ),
-              const SizedBox(height: 5),  // Margin of 10px above lifeSpan text
-              Text(
-                breed['lifeSpan'] ?? '-',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color.fromARGB(255, 122, 122, 122),
-                ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                breed['temperament'] ?? '-',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color.fromARGB(255, 122, 122, 122),
-                ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                breed['bredFor'] ?? '-',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color.fromARGB(255, 122, 122, 122),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-      ],
-    ),
-  ),
-);
-
-
+      ),
+    );
+  }
 }
-}
-
