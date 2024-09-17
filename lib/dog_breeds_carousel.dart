@@ -111,6 +111,8 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     } else if (errorMessage != null) {
@@ -121,80 +123,83 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
           const SizedBox(height: 20),
           // Container to center the row and set its width
           Container(
-            width: MediaQuery.of(context).size.width *
-                0.789, // 78.9% width of the screen
-            alignment: Alignment.center, // Align it at the center
+            width: screenWidth * 0.80, // Always take 80% of the screen width
+            alignment: screenWidth < 675
+                ? Alignment.centerLeft // Move to the left below 675px
+                : Alignment.center, // Center for wider screens
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: screenWidth < 675
+                  ? MainAxisAlignment
+                      .start // Align buttons and text to the left
+                  : MainAxisAlignment
+                      .spaceBetween, // Space them out for larger screens
               children: [
                 // Text at the start of the row
                 const Text(
-                  'Everyday is a dog day', // The text displayed below the carousel
+                  'Everyday is a dog day',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Color(0xFF727277), // Adjust as needed
+                    color: Color(0xFF727277),
                   ),
                 ),
-                // Arrow buttons at the end of the row
-                Row(
-                  children: [
-                    // Left arrow button for previous group of 3 cards
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey[200], // Light grey background color
-                        border: Border.all(
-                          color: Colors.grey, // Border color
-                          width: 1, // Border width
+                if (screenWidth >= 675) // Show buttons only for larger screens
+                  Row(
+                    children: [
+                      // Left arrow button for previous group of 3 cards
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey[200],
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_back_ios),
+                          onPressed: _currentPage > 1 ? _previousPage : null,
+                          iconSize: 24,
+                          padding: EdgeInsets.zero,
+                          color: Colors.grey[600],
                         ),
                       ),
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back_ios),
-                        onPressed: _currentPage > 1 ? _previousPage : null,
-                        iconSize: 24, // Adjust icon size if needed
-                        padding: EdgeInsets.zero, // Remove default padding
-                        color: Colors.grey[600], // Icon color
-                      ),
-                    ),
-                    const SizedBox(width: 8), // Space between buttons
-                    // Right arrow button for next group of 3 cards
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey[200], // Light grey background color
-                        border: Border.all(
-                          color: Colors.grey, // Border color
-                          width: 1, // Border width
+                      const SizedBox(width: 8),
+                      // Right arrow button for next group of 3 cards
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey[200],
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_forward_ios),
+                          onPressed: _currentPage < _dogBreeds.length - 1
+                              ? _nextPage
+                              : null,
+                          iconSize: 24,
+                          padding: EdgeInsets.zero,
+                          color: Colors.grey[600],
                         ),
                       ),
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_forward_ios),
-                        onPressed: _currentPage < _dogBreeds.length - 1
-                            ? _nextPage
-                            : null,
-                        iconSize: 24, // Adjust icon size if needed
-                        padding: EdgeInsets.zero, // Remove default padding
-                        color: Colors.grey[600], // Icon color
-                      ),
-                    ),
-                  ],
-                )
+                    ],
+                  ),
               ],
             ),
           ),
           const SizedBox(height: 10),
+          // Carousel Slider
           SizedBox(
             height: 470, // Height of the carousel
             child: ClipRect(
-              // Ensure that overflow is clipped
               child: Align(
-                alignment: Alignment
-                    .centerLeft, // Align the carousel to the left within the 88% width
+                alignment: Alignment.center, // Always keep centered
                 child: Container(
-                  margin:
-                      const EdgeInsets.only(left: 150), // Left margin of 10px
-                  width: MediaQuery.of(context).size.width *
-                      0.78, // 88% width of the screen
+                  margin: const EdgeInsets.only(left: 0), // Remove left margin
+                  width:
+                      screenWidth * 0.80, // Always take 80% of the screen width
                   child: PageView.builder(
                     controller: _pageController,
                     itemCount: _dogBreeds.length,
@@ -211,13 +216,12 @@ class _DogBreedsCarouselState extends State<DogBreedsCarousel> {
               ),
             ),
           ),
-
           const SizedBox(height: 20),
           // Load More button
           ElevatedButton(
             onPressed: (_currentPage >= _dogBreeds.length - 1 && !isLoadingMore)
-                ? _loadMoreBreeds // Enable only if on the last group of items and not loading more
-                : null, // Disable otherwise (button will be grayed out)
+                ? _loadMoreBreeds
+                : null,
             child: isLoadingMore
                 ? const SizedBox(
                     width: 20,
